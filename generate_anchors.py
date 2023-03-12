@@ -52,7 +52,7 @@ def write_to_file(file):
 def generate_anchors(iterations, k):
 	groups = {i: [] for i in range(k)}
 	file = "train_bboxes.txt"
-	#write_to_file(file)
+	write_to_file(file)
 	bboxes = []
 	with open(file) as f:
 		bboxes = torch.tensor([ast.literal_eval(f"[{line[:-1]}]") for line in f.readlines()])
@@ -69,28 +69,12 @@ def generate_anchors(iterations, k):
 			new_best = v.mean(dim=0)
 			start[key] = new_best
 			groups[key] = []
-		print(i)
+		print("Iteration:", i)
 	return start
 
 if __name__ == '__main__':
-	t = generate_anchors(100, 5)
-	
-	x = torch.ones(3, 448, 448)
-
-	print(t)
-	fig, ax = plt.subplots()
-	ax.imshow(x.permute(1, 2, 0).numpy())
-
-	for ten in t:
-		x = 448 // 2
-		y = 448 // 2
-		w = ten[2] * 448
-		h = ten[3] * 448
-		rect = patches.Rectangle((x - w / 2, y - h / 2), w, h, linewidth=1, edgecolor='r', facecolor='none')
-		ax.add_patch(rect)
-
-	plt.show()
-
+	anchors = generate_anchors(100, 5)
+	print(anchors)
 
 
 
